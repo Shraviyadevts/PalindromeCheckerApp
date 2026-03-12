@@ -1,18 +1,38 @@
 /**
- * ==========================================================
- * MAIN CLASS - UseCase12PalindromeCheckerApp
- * ==========================================================
+ * ============================================================
+ * MAIN CLASS - UseCase13PalindromeCheckerApp
+ * ============================================================
  *
- * Use Case 12: Strategy Pattern for Palindrome Algorithms
+ * Use Case 13: Performance Comparison
  *
- * This program selects a palindrome algorithm dynamically
- * using the Strategy Pattern.
+ * Description:
+ * This class measures and compares the execution
+ * performance of palindrome validation algorithms.
+ *
+ * At this stage, the application:
+ * - Uses a palindrome strategy implementation
+ * - Captures execution start and end time
+ * - Calculates total execution duration
+ * - Displays benchmarking results
+ *
+ * This use case focuses purely on performance
+ * measurement and algorithm comparison.
+ *
+ * The goal is to introduce benchmarking concepts.
+ *
+ * @author Developer
+ * @version 13.0
  */
 
 import java.util.Scanner;
 
 public class PalindromeCheckerApp {
 
+    /**
+     * Application entry point for UC13.
+     *
+     * @param args Command-line arguments
+     */
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -20,74 +40,36 @@ public class PalindromeCheckerApp {
         System.out.print("Input : ");
         String input = scanner.nextLine();
 
-        // Inject strategy
-        PalindromeStrategy strategy = new StackStrategy();
+        // Start time
+        long startTime = System.nanoTime();
 
-        PalindromeService service = new PalindromeService(strategy);
+        // Palindrome checking logic
+        boolean isPalindrome = checkPalindrome(input);
 
-        boolean result = service.check(input);
+        // End time
+        long endTime = System.nanoTime();
 
-        System.out.println("Is Palindrome? : " + result);
+        // Execution time
+        long executionTime = endTime - startTime;
+
+        System.out.println("Is Palindrome? : " + isPalindrome);
+        System.out.println("Execution Time : " + executionTime + " ns");
 
         scanner.close();
     }
-}
 
-/**
- * Strategy Interface
- */
-interface PalindromeStrategy {
-    boolean check(String input);
-}
+    // Method to check palindrome
+    public static boolean checkPalindrome(String str) {
 
-/**
- * Context Class
- */
-class PalindromeService {
+        int left = 0;
+        int right = str.length() - 1;
 
-    private PalindromeStrategy strategy;
-
-    public PalindromeService(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean check(String input) {
-        return strategy.check(input);
-    }
-}
-
-/**
- * Stack Strategy Implementation
- *
- * This class provides a stack based implementation
- * of the PalindromeStrategy interface.
- *
- * It uses LIFO behavior to reverse characters
- * and compare them with the original sequence.
- */
-class StackStrategy implements PalindromeStrategy {
-
-    /**
-     * Implements palindrome validation using Stack.
-     *
-     * @param input input string to validate
-     * @return true if palindrome, false otherwise
-     */
-    public boolean check(String input) {
-
-        // Create a stack to store characters
-        java.util.Stack<Character> stack = new java.util.Stack<>();
-
-        // Push each character of the input string onto the stack
-        for (char c : input.toCharArray()) {
-            stack.push(c);
-        }
-
-        // Compare characters by popping from the stack
-        for (char c : input.toCharArray()) {
-            if (c != stack.pop()) {
+        while (left < right) {
+            if (str.charAt(left) != str.charAt(right)) {
                 return false;
             }
+            left++;
+            right--;
         }
 
         return true;
